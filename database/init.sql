@@ -18,9 +18,7 @@
 -- =========================
 CREATE DATABASE IF NOT EXISTS bloodlink
   CHARACTER SET utf8mb4
-  COLLATE utf8mb4_general_ci
-  COMMENT 'BloodLink Clinical DB: hospital blood bank inventory, issue/transfusion traceability, haemovigilance. Designed to support ISO 15189 expectations for controlled records, traceability, and auditability.';
-
+  COLLATE utf8mb4_general_ci;
 USE bloodlink;
 
 SET FOREIGN_KEY_CHECKS = 0;
@@ -394,11 +392,10 @@ VALUES
 -- =============================
 -- DB2: GOVERNANCE (bloodlink_gov)
 -- =============================
+-- BloodLink Governance DB: customer orgs/facilities, licensing, RBAC, audit logs. ISO15189 alignment: access control + accountability + audit logging (supports controlled records governance; clinical data stays separate).';
 CREATE DATABASE IF NOT EXISTS bloodlink_gov
   CHARACTER SET utf8mb4
-  COLLATE utf8mb4_general_ci
-  COMMENT 'BloodLink Governance DB: customer orgs/facilities, licensing, RBAC, audit logs. ISO15189 alignment: access control + accountability + audit logging (supports controlled records governance; clinical data stays separate).';
-
+  COLLATE utf8mb4_general_ci;
 USE bloodlink_gov;
 
 SET FOREIGN_KEY_CHECKS = 0;
@@ -706,35 +703,35 @@ COMMENT='Governance support/incident records (non-clinical). ISO15189: Quality m
 -- ---------------------------------------------------------------------
 -- Governance Seed Data (minimal)
 -- ---------------------------------------------------------------------
--- INSERT INTO roles (role_name, description) VALUES
--- ('GOV_ADMIN', 'BloodLink internal governance admin'),
--- ('ORG_ADMIN', 'Customer organisation admin'),
--- ('CLINICAL_STAFF', 'Hospital/blood bank operational user'),
--- ('AUDITOR', 'Read-only audit access');
+INSERT INTO roles (role_name, description) VALUES
+('GOV_ADMIN', 'BloodLink internal governance admin'),
+('ORG_ADMIN', 'Customer organisation admin'),
+('CLINICAL_STAFF', 'Hospital/blood bank operational user'),
+('AUDITOR', 'Read-only audit access');
 
--- INSERT INTO organisations (name, organisation_type, registration_number, country, contact_email) VALUES
--- ('St. Example Hospital', 'HOSPITAL', 'IE-EX-0001', 'IE', 'it@stexample.ie'),
--- ('Example Blood Bank', 'BLOOD_BANK', 'IE-EX-0002', 'IE', 'ops@examplebloodbank.ie');
+INSERT INTO organisations (name, organisation_type, registration_number, country, contact_email) VALUES
+('St. Example Hospital', 'HOSPITAL', 'IE-EX-0001', 'IE', 'it@stexample.ie'),
+('Example Blood Bank', 'BLOOD_BANK', 'IE-EX-0002', 'IE', 'ops@examplebloodbank.ie');
 
--- INSERT INTO facilities (organisation_id, facility_name, address, city, postcode, country) VALUES
--- (1, 'St. Example Hospital - Transfusion Lab', '1 Example Rd', 'Dublin', 'D02 XXXX', 'IE'),
--- (2, 'Example Blood Bank - Central Store', '2 Example Rd', 'Dublin', 'D01 YYYY', 'IE');
+INSERT INTO facilities (organisation_id, facility_name, address, city, postcode, country) VALUES
+(1, 'St. Example Hospital - Transfusion Lab', '1 Example Rd', 'Dublin', 'D02 XXXX', 'IE'),
+(2, 'Example Blood Bank - Central Store', '2 Example Rd', 'Dublin', 'D01 YYYY', 'IE');
 
--- INSERT INTO subscriptions (organisation_id, plan_type, start_date, end_date, status) VALUES
--- (1, 'TRIAL', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY), 'ACTIVE'),
--- (2, 'TRIAL', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY), 'ACTIVE');
+INSERT INTO subscriptions (organisation_id, plan_type, start_date, end_date, status) VALUES
+(1, 'TRIAL', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY), 'ACTIVE'),
+(2, 'TRIAL', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 30 DAY), 'ACTIVE');
 
--- INSERT INTO system_installations (facility_id, installation_uuid, environment, version, active) VALUES
--- (1, '11111111-1111-1111-1111-111111111111', 'DEV', '0.1.0', TRUE),
--- (2, '22222222-2222-2222-2222-222222222222', 'DEV', '0.1.0', TRUE);
+INSERT INTO system_installations (facility_id, installation_uuid, environment, version, active) VALUES
+(1, '11111111-1111-1111-1111-111111111111', 'DEV', '0.1.0', TRUE),
+(2, '22222222-2222-2222-2222-222222222222', 'DEV', '0.1.0', TRUE);
 
--- INSERT INTO license_keys (installation_id, license_key, valid_until, active) VALUES
--- (1, 'LIC-DEV-STEXAMPLE-0001', DATE_ADD(CURDATE(), INTERVAL 365 DAY), TRUE),
--- (2, 'LIC-DEV-EXBLOODBANK-0001', DATE_ADD(CURDATE(), INTERVAL 365 DAY), TRUE);
+INSERT INTO license_keys (installation_id, license_key, valid_until, active) VALUES
+(1, 'LIC-DEV-STEXAMPLE-0001', DATE_ADD(CURDATE(), INTERVAL 365 DAY), TRUE),
+(2, 'LIC-DEV-EXBLOODBANK-0001', DATE_ADD(CURDATE(), INTERVAL 365 DAY), TRUE);
 
--- -- Placeholder password hash (replace via app using password_hash())
--- INSERT INTO users (organisation_id, role_id, email, password_hash, is_active) VALUES
--- (1, 2, 'admin@stexample.ie', '$2y$10$REPLACE_ME_WITH_PASSWORD_HASH', TRUE);
+-- Placeholder password hash (replace via app using password_hash())
+INSERT INTO users (organisation_id, role_id, email, password_hash, is_active) VALUES
+(1, 2, 'admin@stexample.ie', '$2y$10$REPLACE_ME_WITH_PASSWORD_HASH', TRUE);
 
--- INSERT INTO audit_logs (user_id, action, entity_type, entity_id, metadata_json) VALUES
--- (1, 'SEED', 'DATABASE', NULL, JSON_OBJECT('note','Initial seed complete'));
+INSERT INTO audit_logs (user_id, action, entity_type, entity_id, metadata_json) VALUES
+(1, 'SEED', 'DATABASE', NULL, JSON_OBJECT('note','Initial seed complete'));
